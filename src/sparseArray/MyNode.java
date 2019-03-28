@@ -7,7 +7,11 @@ public class MyNode implements Node {
     // pointer to the next node in the row and
     // pointer to the next node in the column
     // FILL IN CODE
-
+    Node nextRow;
+    Node nextColumn;
+    int row;
+    int column;
+    Object Value;
     /**
      * MatrixNode constructor
      * @param rowIndex row
@@ -16,7 +20,9 @@ public class MyNode implements Node {
      */
     public MyNode(int rowIndex, int columnIndex, Object value) {
         // FILL IN CODE
-
+        row = rowIndex;
+        column = columnIndex;
+        Value = value;
 
     }
 
@@ -26,6 +32,7 @@ public class MyNode implements Node {
      */
     public void setRowNext(Node node){
         // FILL IN CODE
+        nextRow = node;
     }
 
     /**
@@ -34,7 +41,7 @@ public class MyNode implements Node {
      */
     public void setColNext(Node node){
         // FILL IN CODE
-
+        nextColumn = node;
     }
 
     /**
@@ -43,7 +50,7 @@ public class MyNode implements Node {
      */
     public void setValue(Object value){
         // FILL IN CODE
-
+        Value = value;
     }
 
     /**
@@ -53,7 +60,7 @@ public class MyNode implements Node {
     public Node rowNext(){
         // FILL IN CODE
 
-        return null; // change it
+        return nextRow; // change it
     }
 
     /**
@@ -63,7 +70,7 @@ public class MyNode implements Node {
     public Node colNext() {
         // FILL IN CODE
 
-        return null; // change it
+        return nextColumn; // change it
     }
 
     /**
@@ -74,7 +81,7 @@ public class MyNode implements Node {
     public int rowIndex(){
         // FILL IN CODE
 
-        return 0; // change
+        return row; // change
     }
 
     /**
@@ -85,7 +92,7 @@ public class MyNode implements Node {
     public int columnIndex(){
         // FILL IN CODE
 
-        return 0; // change
+        return column; // change
     }
 
     /**
@@ -96,6 +103,6 @@ public class MyNode implements Node {
     public Object value(){
         // FILL IN CODE
 
-        return null; // change
+        return Value; // change
     }
 }
