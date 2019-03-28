@@ -57,7 +57,7 @@ public class MySparseArray implements SparseArray {
                 curr = curr.rowNext();
         }
 //        rowHead.nextRow can delete
-        return null; // change
+        return getDefaultValue(); // change
     }
 
 
@@ -207,7 +207,6 @@ public class MySparseArray implements SparseArray {
             }
 
             if (tempR.colNext() != null && tempR.colNext().columnIndex() == col) { // if it exists, simply write the new object
-
                 tempR.colNext().setValue(value);
             } else { // if we create a new one, we must go back and connect it through the columns as well
                 MyNode node = new MyNode(row, col, value);
@@ -232,17 +231,19 @@ public class MySparseArray implements SparseArray {
     @Override
     public void readFromFile(String filename){
         // FILL IN CODE
-        File file = new File(filename);
+
         try {
+            File file = new File(filename);
             Scanner input = new Scanner(file);
             while(input.hasNextLine()) {
-                String list[] = input.nextLine().split(",");
-                setValue(Integer.parseInt(list[0]), Integer.parseInt(list[1]), Integer.parseInt(list[2]));
+                    String list[] = input.nextLine().split(",");
+                    setValue(Integer.parseInt(list[0]), Integer.parseInt(list[1]), Integer.parseInt(list[2]));
+
             }
             input.close();
         }
         catch (Exception e){
-            System.out.println("File not found!");
+            System.out.println(e);
         }
     }
 
@@ -271,12 +272,65 @@ public class MySparseArray implements SparseArray {
 
     }
 
-    public void printSparseArray(){
-        System.out.println(columnHead.colNext().columnIndex());
-       // System.out.println(rowHead.rowNext().rowIndex());
-      //  System.out.println(columnHead.colNext());
-//        System.out.println(columnHead.colNext().columnIndex());
-//        System.out.println(columnHead.colNext().colNext().columnIndex());
+    public int Neighbors(int row, int column){
+        //Max of 8
+        int neighbors = 0;
+       // the column can't be 0 for these to execute
+        if(column != 0){
+            if(row != 0){
+                if (!elementAt(row - 1, column - 1).equals(getDefaultValue()))
+                    neighbors++;
+            }
+            if(!elementAt(row, column-1).equals(getDefaultValue()))
+                neighbors++;
+            if(!elementAt(row+1, column-1).equals(getDefaultValue()))
+                neighbors++;
+        }
+        // the row can't be 0 for these to execute
+        if(row != 0){
+            if(!elementAt(row - 1, column).equals(getDefaultValue()))
+                neighbors++;
+            if(!elementAt(row-1, column + 1).equals(getDefaultValue()))
+                neighbors++;
+        }
+        //These can be executed every time
+        if(!elementAt(row, column+1).equals(getDefaultValue()))
+            neighbors++;
+        if(!elementAt(row+1, column).equals(getDefaultValue()))
+            neighbors++;
+        if(!elementAt(row+1, column+1).equals(getDefaultValue()))
+            neighbors++;
+
+        return neighbors;
+    }
+
+    public void newGeneration(MySparseArray newGen){
+        // add nodes to new Gen : newGen.setValue();
+        //curr and next
+        //curr.newGeneration(next)
+        // use this.function() to get info from first gen
+
+        //check alive for next generation
+    }
+
+    public boolean Alive(int row, int column, boolean alive){
+        int neighbors = Neighbors(row, column);
+        if(alive) {
+            if (neighbors <= 1) {
+                return false;
+            }
+            if (neighbors >= 2 && neighbors <= 3) {
+                return true;
+            }
+            if(neighbors >= 4){
+                return false;
+            }
+        }
+        //if it's dead, we check if it can come back to life
+        if(neighbors == 3)
+            return true;
+
+        return false;
     }
 
 
