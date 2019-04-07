@@ -272,7 +272,7 @@ public class MySparseArray implements SparseArray {
 
     }
 
-    public int Neighbors(int row, int column){
+    public int neighbors(int row, int column){
         //Max of 8
         int neighbors = 0;
        // the column can't be 0 for these to execute
@@ -305,34 +305,47 @@ public class MySparseArray implements SparseArray {
     }
 
     public void newGeneration(MySparseArray newGen){
-        // add nodes to new Gen : newGen.setValue();
-        //curr and next
-        //curr.newGeneration(next)
-        // use this.function() to get info from first gen
+        //first add the ones that will revive next round to the newGEn, and then delete the ones that should die within the current gen, lastly copy it over
+        Node node = rowHead;
+        // See if any dead cells will be brought to life .... Also which ones should be alive?
+        while(node != null){
+            Node tempN = node.colNext();
+            while(tempN != null) {
+                int row = tempN.rowIndex();
+                int column = tempN.columnIndex();
+                //check for those that can be brought to life
+                if(column != 0){
+                    if(row != 0){
+                        if (neighbors(row - 1, column - 1) == 3)
+                            newGen.setValue(row - 1, column - 1, 1);
+                    }
+                    if(neighbors(row, column - 1) == 3)
+                        newGen.setValue(row, column - 1, 1);
+                    if(neighbors(row + 1, column - 1) == 3)
+                        newGen.setValue(row + 1, column - 1, 1);
+                }
+                // the row can't be 0 for these to execute
+                if(row != 0){
+                    if(neighbors(row - 1, column) == 3)
+                        newGen.setValue(row - 1, column, 1);
+                    if(neighbors(row - 1, column + 1) == 3)
+                        newGen.setValue(row - 1, column + 1, 1);
+                }
+                // these can be executed every time
+                if(neighbors(row, column + 1) == 3)
+                    newGen.setValue(row, column + 1, 1);
+                if(neighbors(row + 1, column) == 3)
+                    newGen.setValue(row + 1, column, 1);
+                if(neighbors(row + 1, column + 1) == 3)
+                    newGen.setValue(row + 1, column + 1, 1);
 
-        //check alive for next generation
-    }
-
-    public boolean Alive(int row, int column, boolean alive){
-        int neighbors = Neighbors(row, column);
-        if(alive) {
-            if (neighbors <= 1) {
-                return false;
+                //checks if the current node should be alive in the next generation
+                if(neighbors(row, column) == 2 || neighbors(row, column) == 3){
+                    newGen.setValue(row, column, 1);
+                }
+                tempN = tempN.colNext();
             }
-            if (neighbors >= 2 && neighbors <= 3) {
-                return true;
-            }
-            if(neighbors >= 4){
-                return false;
-            }
+            node = node.rowNext();
         }
-        //if it's dead, we check if it can come back to life
-        if(neighbors == 3)
-            return true;
-
-        return false;
     }
-
-
-    // Add other methods as needed - like the method that counts neighbors of the cell etc.
 }
